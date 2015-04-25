@@ -12,7 +12,7 @@ trait ReferenceTrait {
         return ( $this->newQuery()->where($column,'=',$reference)->count() > 0 );
     }
 
-    public function newUniqueRef(Query $query, $length = 5, $column = 'ref', $type = 'numeric')
+    public function newUniqueRef($query, $length = 5, $column = 'ref', $type = 'numeric')
     {
         $ref = $this->newRandomRef($length, $type);
 
