@@ -1,5 +1,9 @@
 <?php namespace Origami\Support\Entities;
 
+use Exception;
+use Illuminate\Database\Eloquent\Builder as Eloquent;
+use Illuminate\Support\Facades\DB;
+
 trait ReferenceTrait {
 
     public function findByRef($reference, $column = 'ref')
@@ -14,33 +18,47 @@ trait ReferenceTrait {
 
     public function newUniqueRef($query, $length = 5, $column = 'ref', $type = 'numeric')
     {
-        $ref = $this->newRandomRef($length, $type);
+        if ( $query instanceof Eloquent ) {
+            $query = $query->getModel()->newQueryWithoutScopes();
+        }
 
-        $tries = 1;
+        $tries = 0;
 
-        while ( $query->where($column,'=',$ref)->count() > 0 ) {
+        do {
+
             $tries++;
-            $ref = $this->newRandomRef($length, $type);
-            if ( $tries%5 ) {
+            if ( $tries%5 == 0 ) {
                 $length++;
             }
-        }
+
+            $ref = $this->newRandomRef($length, $type);
+            $check = clone $query;
+
+        } while ( $check->where($column,'=',$ref)->exists() );
 
         return $ref;
     }
 
     protected function newRandomRef($length, $type = 'numeric')
     {
+        if ( $length < 3 ) {
+            throw new Exception('Random ref cannot be less than 3');
+        }
+
         switch ( $type ) {
             case 'alphanumeric':
                 $pool = '0123456789abcdefghijklmnopqrstuvwxyz';
+                return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
                 break;
             case 'numeric':
+                $ref = mt_rand(1,9);
+                foreach ( range(2, $length) as $index ) {
+                    $ref .= mt_rand(0,9);
+                }
+                return $ref;
             default:
-                $pool = '123456789';
+                throw new Exception('Random type '.$type.' not supported');
         }
-
-        return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
     }
 
     abstract protected function newQuery();
