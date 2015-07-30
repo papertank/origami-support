@@ -19,3 +19,9 @@ if ( ! function_exists('select_placeholder') ) {
         return [ '' => $placeholder ] + $options;
     }
 }
+
+if ( ! function_exists('link_sort') ) {
+	function link_sort($key, $label, $default = null) {
+		return app('Origami\Support\Filter')->sortByLink($key, $label, $default);	
+	}
+}
