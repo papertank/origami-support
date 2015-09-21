@@ -33,9 +33,9 @@ abstract class DbRepository {
         return ( $this->newQuery()->where($column, $comparison, $value)->count() > 0 );
     }
 
-    protected function parseSortOrder($sort)
+    protected function parseSortOrder($sort, $separator = '.')
     {
-        list($order, $direction) = $sort ? explode('.', $sort) : null;
+        list($order, $direction) = str_contains($sort, $separator) ? explode($separator, $sort) : [$sort, null];
 
         return [
             'field' => $order,
