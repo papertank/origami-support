@@ -1,0 +1,28 @@
+<?php
+
+namespace DummyNamespace;
+
+use Origami\Support\Entities\DbRepository;
+
+class DummyClass extends DbRepository
+{
+    /**
+     * Create a new repository instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Get a new model query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function newQuery()
+    {
+        //
+    }
+}

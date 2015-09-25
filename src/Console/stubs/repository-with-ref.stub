@@ -1,0 +1,37 @@
+<?php
+
+namespace DummyNamespace;
+
+use Origami\Support\Entities\DbRepository;
+use Origami\Support\Entities\ReferenceTrait;
+
+class DummyClass extends DbRepository
+{
+
+	use ReferenceTrait;
+
+    /**
+     * Create a new repository instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    protected function newRef()
+    {
+        return $this->newUniqueRef($this->newQuery(), 5, 'ref', 'numeric');
+    }
+
+    /**
+     * Get a new model query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function newQuery()
+    {
+        //
+    }
+}
