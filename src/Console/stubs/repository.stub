@@ -21,7 +21,7 @@ class DummyClass extends DbRepository
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function newQuery()
+    protected function newQuery()
     {
         //
     }
