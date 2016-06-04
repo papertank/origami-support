@@ -16,6 +16,27 @@ trait ReferenceTrait {
         return ( $this->newQuery()->where($column,'=',$reference)->count() > 0 );
     }
 
+    public function newSequentialRef($query, $prefix = null, $length = 3, $column = 'ref')
+    {
+        if ( $query instanceof Eloquent ) {
+            $query = $query->getModel()->newQueryWithoutScopes();
+        }
+
+        $last = $query->orderBy('created_at', 'desc')->value($column);
+
+        if ( ! $last ) {
+            return $prefix . str_pad(1, $length, '0', STR_PAD_LEFT);
+        }
+
+        if ( strpos($last, $prefix) === 0 ) {
+            $last = substr($last, strlen($prefix));
+        }
+
+        $next = (int) $last + 1;
+
+        return $prefix . str_pad($next, $length, '0', STR_PAD_LEFT);
+    }
+
     public function newUniqueRef($query, $length = 5, $column = 'ref', $type = 'numeric')
     {
         if ( $query instanceof Eloquent ) {
