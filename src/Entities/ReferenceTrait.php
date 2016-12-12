@@ -1,4 +1,6 @@
-<?php namespace Origami\Support\Entities;
+<?php 
+
+namespace Origami\Support\Entities;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
@@ -22,7 +24,9 @@ trait ReferenceTrait {
             $query = $query->getModel()->newQueryWithoutScopes();
         }
 
-        $last = $query->orderBy('created_at', 'desc')->value($column);
+        $last = $query->orderBy('created_at', 'desc')
+                      ->orderBy($column, 'desc')
+                      ->value($column);
 
         if ( ! $last ) {
             return $prefix . str_pad(1, $length, '0', STR_PAD_LEFT);
@@ -32,9 +36,17 @@ trait ReferenceTrait {
             $last = substr($last, strlen($prefix));
         }
 
-        $next = (int) $last + 1;
+        $next = (int) $last;
 
-        return $prefix . str_pad($next, $length, '0', STR_PAD_LEFT);
+        do {
+
+            $next++;
+            $ref = $prefix . str_pad($next, $length, '0', STR_PAD_LEFT);
+            $check = clone $query;
+
+        } while ( $check->where($column,'=',$ref)->exists() );
+
+        return $ref;
     }
 
     public function newUniqueRef($query, $length = 5, $column = 'ref', $type = 'numeric')
