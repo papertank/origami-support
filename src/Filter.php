@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Origami\Support;
 
@@ -34,12 +34,11 @@ class Filter {
 
     public function sortByLink($key, $label, $default = null)
     {
-        $default = $this->getSortDefaults($default);
+        $default = $this->getSort($default);
+        $sort = $this->getSort();
 
-        $sort = $this->request->input('sort');
-
-        $direction = $sort ?
-                        $this->oppositeSortDirection($this->getSortDirection($sort)) :
+        $direction = $sort['direction'] ?
+                        $this->oppositeSortDirection($sort['direction']) :
                         $default['direction'];
 
         $uri = $this->request->path();
@@ -48,7 +47,7 @@ class Filter {
             'sort' => $key.'.'.$direction,
         ]);
 
-        $class = $this->getSortClass($key, $default['key'], $direction);
+        $class = $this->getSortClass($key, $this->request->input('sort') ? $sort : $default);
 
         return $this->html->link(
                 $this->url->to($uri).'?'.http_build_query($query),
@@ -62,27 +61,22 @@ class Filter {
         return ( $direction == 'asc' ? 'desc' : 'asc' );
     }
 
-    protected function getSortClass($key, $default, $direction)
+    protected function getSortClass($key, $sort)
     {
-        $class = null;
+        $class = 'sort';
 
-        if ( $this->request->input('sort', $default) == $key ) {
-            $class = 'active sort-'.$direction;
+        if ( $sort['key'] == $key ) {
+            $class .= ' sort-active sort-'.$sort['direction'];
         }
 
         return $class;
     }
 
-    protected function getSortDirection($sort)
+    protected function getSort($sort = null)
     {
-        list($key, $direction) = explode('.', trim($sort));
+        $sort = $sort ?: $this->request->input('sort');
 
-        return $direction ?: null;
-    }
-
-    protected function getSortDefaults($default)
-    {
-        list($key, $direction) = array_merge( explode('.', trim($default)), [ null ] );
+        list($key, $direction) = array_merge( explode('.', trim($sort)), [ null ] );
 
         return [
             'key' => $key,
