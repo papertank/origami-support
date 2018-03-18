@@ -39,6 +39,17 @@ class SupportServiceProvider extends ServiceProvider
         $this->commands(array_values($this->commands));
     }
 
+    public function boot()
+    {
+        $this->app->singleton('Origami\Support\Filter', function($app) {
+            return new Filter(
+                $app['request'],
+                $app['url'],
+                $app['Collective\Html\HtmlBuilder']
+            );
+        });
+    }
+
     /**
      * Register the command.
      *
