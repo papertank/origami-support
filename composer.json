@@ -25,6 +25,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.4-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Origami\\Support\\SupportServiceProvider"
+            ]
         }
     },
     "minimum-stability": "stable"
