@@ -1,24 +1,25 @@
-<?php namespace Origami\Support\Entities;
+<?php
 
-trait PaginateTrait {
+namespace Origami\Support\Entities;
 
-    protected $per_page = 20;
+trait PaginateTrait
+{
+    protected $perPage = 20;
 
     public function setPerPage($number)
     {
-    	$this->per_page = $number;
+        $this->perPage = $number;
 
-    	return $this;
+        return $this;
     }
 
     public function getPerPage()
     {
-    	return $this->per_page;
+        return $this->perPage;
     }
 
     protected function buildPaginatedResults($query, $columns = ['*'])
     {
-        return $query->paginate($this->per_page, $columns);
+        return $query->paginate($this->perPage, $columns);
     }
-
 }

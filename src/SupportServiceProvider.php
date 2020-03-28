@@ -15,33 +15,22 @@ class SupportServiceProvider extends ServiceProvider
     protected $defer = true;
 
     /**
-     * The commands to be registered.
-     *
-     * @var array
-     */
-    protected $commands = [
-        'RepositoryMake' => 'command.repository.make'
-    ];
-
-    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        foreach (array_keys($this->commands) as $command) {
-            $method = "register{$command}Command";
+        $this->registerRepositoryMakeCommand();
 
-            call_user_func_array([$this, $method], []);
-        }
-
-        $this->commands(array_values($this->commands));
+        $this->commands([
+            'command.repository.make'
+        ]);
     }
 
     public function boot()
     {
-        $this->app->singleton('Origami\Support\Filter', function($app) {
+        $this->app->singleton(Filter::class, function ($app) {
             return new Filter(
                 $app['request'],
                 $app['url'],
@@ -69,6 +58,6 @@ class SupportServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array_values($this->commands);
+        return ['command.repository.make'];
     }
 }

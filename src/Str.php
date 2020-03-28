@@ -1,27 +1,30 @@
-<?php namespace Origami\Support;
+<?php
 
-class Str {
+namespace Origami\Support;
 
-    public static function splitName($name) {
+class Str
+{
+    public static function splitName($name)
+    {
         $firstname = $name = trim($name);
 
-        if ( strpos($name, ' ') !== false ) {
-            list($firstname, $lastname) =  explode(' ', $name, 2);
+        if (strpos($name, ' ') !== false) {
+            list($firstname, $lastname) = explode(' ', $name, 2);
         }
 
-        return array($firstname, ( isset($lastname) ? $lastname : NULL ));
+        return [$firstname, (isset($lastname) ? $lastname : null)];
     }
 
-    public static function possessive($str) {
-        if ( ! $str ) {
+    public static function possessive($str)
+    {
+        if (!$str) {
             return '';
         }
 
-        if ( substr($str, -1) == 's' ) {
-            return $str.'’';
+        if (substr($str, -1) == 's') {
+            return $str . '’';
         }
 
-        return $str.'’s';
+        return $str . '’s';
     }
-
 }

@@ -1,12 +1,14 @@
-<?php namespace Origami\Support\Entities;
+<?php
 
-abstract class DbRepository {
+namespace Origami\Support\Entities;
 
+abstract class DbRepository
+{
     public function random($limit = null)
     {
         $query = $this->newQuery()->orderByRaw('RAND()');
 
-        if ( is_null($limit) ) {
+        if (is_null($limit)) {
             return $query->first();
         }
 
@@ -30,7 +32,7 @@ abstract class DbRepository {
 
     public function existsWhere($column, $value, $comparison = '=')
     {
-        return ( $this->newQuery()->where($column, $comparison, $value)->count() > 0 );
+        return ($this->newQuery()->where($column, $comparison, $value)->count() > 0);
     }
 
     protected function parseSortOrder($sort, $separator = '.')
@@ -39,10 +41,9 @@ abstract class DbRepository {
 
         return [
             'field' => $order,
-            'direction' => ( in_array($direction, ['asc', 'desc']) ? $direction : 'desc' )
+            'direction' => (in_array($direction, ['asc', 'desc']) ? $direction : 'desc')
         ];
     }
 
     abstract protected function newQuery();
-
 }
