@@ -1,5 +1,7 @@
 <?php namespace Origami\Support\Entities;
 
+use Illuminate\Support\Str;
+
 abstract class DbRepository {
 
     public function random($limit = null)
@@ -35,7 +37,7 @@ abstract class DbRepository {
 
     protected function parseSortOrder($sort, $separator = '.')
     {
-        list($order, $direction) = str_contains($sort, $separator) ? explode($separator, $sort) : [$sort, null];
+        list($order, $direction) = Str::contains($sort, $separator) ? explode($separator, $sort) : [$sort, null];
 
         return [
             'field' => $order,
