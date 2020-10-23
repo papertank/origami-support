@@ -24,7 +24,7 @@ class SupportServiceProvider extends ServiceProvider
         $this->registerRepositoryMakeCommand();
 
         $this->commands([
-            'command.repository.make'
+            RepositoryMakeCommand::class,
         ]);
     }
 
@@ -33,8 +33,7 @@ class SupportServiceProvider extends ServiceProvider
         $this->app->singleton(Filter::class, function ($app) {
             return new Filter(
                 $app['request'],
-                $app['url'],
-                $app['Collective\Html\HtmlBuilder']
+                $app['url']
             );
         });
     }
@@ -46,7 +45,7 @@ class SupportServiceProvider extends ServiceProvider
      */
     protected function registerRepositoryMakeCommand()
     {
-        $this->app->singleton('command.repository.make', function ($app) {
+        $this->app->singleton(RepositoryMakeCommand::class, function ($app) {
             return new RepositoryMakeCommand($app['files']);
         });
     }
@@ -58,6 +57,8 @@ class SupportServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['command.repository.make'];
+        return [
+            RepositoryMakeCommand::class
+        ];
     }
 }

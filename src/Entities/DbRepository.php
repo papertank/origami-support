@@ -8,7 +8,7 @@ abstract class DbRepository
 {
     public function random($limit = null)
     {
-        $query = $this->newQuery()->orderByRaw('RAND()');
+        $query = $this->newQuery()->inRandomOrder();
 
         if (is_null($limit)) {
             return $query->first();
